@@ -48,7 +48,7 @@ const LoginPage = () => {
       if(result?.data?.isAdmin)
         navigate("/admin");
       else
-        navigate(location.state?.from || "/");
+        navigate(location.state?.from || "/products");
       toast.success(result.message || "Logged in successful");
       setFormData({
           email: "",
