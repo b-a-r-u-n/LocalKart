@@ -10,7 +10,7 @@ const NotFoundPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center px-4">
       <div className="max-w-2xl w-full text-center">
         <div className="relative">
-          <h1 className="text-[180px] leading-none font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
+          <h1 className="text-8xl md:text-[180px] leading-none font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
             404
           </h1>
           <div className="absolute inset-0 blur-3xl opacity-20 bg-gradient-to-r from-blue-400 to-purple-400 -z-10"></div>
