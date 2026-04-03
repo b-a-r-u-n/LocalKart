@@ -15,7 +15,9 @@ export default defineConfig({
   // },
   server: {
     allowedHosts: [
-      "partnerships-developed-pour-election.trycloudflare.com"
+      // "partnerships-developed-pour-election.trycloudflare.com"
+      "scheduled-bill-conflict-measured.trycloudflare.com",
+      "api-odishalokalkart.onrender.com"
     ]
   },
   plugins: [react(), tailwindcss()],
