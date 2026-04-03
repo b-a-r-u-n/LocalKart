@@ -84,7 +84,7 @@ function Navbar() {
             {isLoggedIn ? (
               <>
 
-                {!user.isAdmin && (
+                {!user?.isAdmin && (
                   <>
 
                     <Link to="/cart" className="relative">
@@ -115,7 +115,7 @@ function Navbar() {
                     <span
                       className="hidden sm:block"
                     >
-                      {user.fullName}
+                      {user?.fullName}
                     </span>
                   </button>
 
@@ -128,7 +128,7 @@ function Navbar() {
                         onClick={() =>
                           setShowUserMenu(!showUserMenu)
                         }
-                        to={`${user?.isAdmin ? `/admin/${user._id}/profile` : `/${user._id}/profile`}`}
+                        to={`${user?.isAdmin ? `/admin/${user?._id}/profile` : `/${user?._id}/profile`}`}
                         className={({isActive}) => `flex font-semibold items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
                                 ? 'bg-[#0ea5e9] text-white'
                                 : 'text-gray-700 hover:bg-gray-100'
@@ -140,7 +140,7 @@ function Navbar() {
 
 
                       {
-                      user.isAdmin &&
+                      user?.isAdmin &&
                       menuItems.map((item) => {
                         const Icon = item.icon;
                         const isActive = location.pathname === item.path;
@@ -157,7 +157,7 @@ function Navbar() {
                               }`}
                           >
                             <Icon size={20} />
-                            <span>{item.label}</span>
+                            <span>{item?.label}</span>
                           </Link>
                         );
                       })}

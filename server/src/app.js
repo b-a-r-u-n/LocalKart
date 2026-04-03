@@ -5,7 +5,7 @@ import cors from "cors";
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:5173", "http://10.225.151.237:5173", "https://partnerships-developed-pour-election.trycloudflare.com"],
+    origin: "http://localhost:5173",
     credentials: true
 }))
 

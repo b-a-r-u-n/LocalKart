@@ -50,7 +50,7 @@ const uploadOnCloudinary = async (fileLocalPaths) => {
 //             throw new apiError(400, 'No file found');
 //         const publicId = url.split('/').pop().split('.')[0];
 //         const res = await cloudinary.uploader.destroy(`localkart/${publicId}`);
-//         // console.log(publicId);
+//         console.log(publicId);
 //         console.log(res);
 //         return res;
 //     } catch (error) {

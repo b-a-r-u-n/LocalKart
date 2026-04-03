@@ -43,10 +43,19 @@ export const updateCartItem = createAsyncThunk("updateCartItem", async ({ produc
     }
 })
 
+export const clearCart = createAsyncThunk("clearCart", async (_, {rejectWithValue}) => {
+    try {
+        const response =await axios.delete(`${import.meta.env.VITE_BASE_URL}/cart/clear-cart`, { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || error.message);
+    }
+})
+
 const initialState = {
     cartData: [],
     cartDataLocal: null,
-    loading: true,
+    loading: false,
     success: false,
     totalPrice: 0,
     totalSubPrice: 0,
@@ -153,6 +162,21 @@ const cartSlice = createSlice({
             state.loading = false;
             state.success = false;
         })
+
+        // clear cart
+        builder.addCase(clearCart.pending, (state, _) => {
+            state.loading = true;
+        })
+        builder.addCase(clearCart.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.cartData = [];
+        })
+        builder.addCase(clearCart.rejected, (state, _) => {
+            state.loading = false;
+            state.success = false;
+        })
+
     }
 })
 

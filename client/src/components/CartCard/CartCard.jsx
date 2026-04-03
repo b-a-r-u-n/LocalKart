@@ -56,8 +56,8 @@ const CartCard = ({ item }) => {
 
     return (
 
-        <Card className="p-6">
-            <div className="flex gap-4">
+        <Card className="p-2 md:p-6">
+            <div className="flex flex-wrap gap-4">
                 <img
                     src={item?.productId?.images[0]?.url}
                     alt={item?.productId?.name}
@@ -70,7 +70,7 @@ const CartCard = ({ item }) => {
                         <h3 className="mb-2">{item?.productId?.name}</h3>
                     </Link>
                     <p className="text-2xl text-[#111827] mb-2">₹ {item?.productId?.discountPrice}</p>
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-4">
                         <div className="flex items-center border border-[#e5e7eb] rounded-lg">
                             <button
                                 className="px-3 py-1 hover:bg-gray-100 transition-colors cursor-pointer"
@@ -96,7 +96,7 @@ const CartCard = ({ item }) => {
                 </div>
                 <div className="text-right">
                     <p className="text-xl text-[#111827]">
-                        {item.productId.discountPrice * quantity}
+                       ₹{item.productId.discountPrice * quantity}
                     </p>
                 </div>
             </div>

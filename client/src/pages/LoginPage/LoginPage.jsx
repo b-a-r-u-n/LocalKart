@@ -57,7 +57,7 @@ const LoginPage = () => {
 
     } catch (error) {
         console.log(error);
-        console.log("Hello");
+        // console.log("Hello");
         
         
         toast.error(error?.message || "Log in failed");

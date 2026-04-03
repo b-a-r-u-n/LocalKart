@@ -77,39 +77,22 @@ const AppWrapper = () => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
 
-  const { isLoggedIn, isAdmin } = useSelector(state => state.auth);
+  const { isLoggedIn, user } = useSelector(state => state.auth);
 
   useEffect(() => {
+    
     dispatch(checkAuth()); // ✅ runs on every route
     // dispatch(getCartData()); // ✅ runs on every route
   }, []);
 
-  // useEffect(() => {
-  //   if(isLoggedIn && isAdmin)
-  //     navigate("/admin");
-  // }, [isLoggedIn, isAdmin])
+  useEffect(() => {
+    if(isLoggedIn)
+      dispatch(getCartData());
+  }, [isLoggedIn])
 
   return <RouterProvider router={router} />;
 }
 
-// const AppWrapper = () => {
-//   const dispatch = useDispatch();
-//   const { loading: authLoading } = useSelector(state => state.auth);
-//   const { loading: cartLoading } = useSelector(state => state.cart);
-
-//   useEffect(() => {
-//     dispatch(checkAuth());
-//     dispatch(getCartData());
-//   }, [dispatch]);
-
-//   if (authLoading || cartLoading) return (
-//     <div className="min-h-screen flex items-center justify-center">
-//       <div className="w-8 h-8 border-4 border-[#0ea5e9] border-t-transparent rounded-full animate-spin"></div>
-//     </div>
-//   );
-
-//   return <RouterProvider router={router} />;
-// }
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>

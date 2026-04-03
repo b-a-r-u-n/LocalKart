@@ -5,16 +5,16 @@ import { Edit, Phone, Trash2, Truck } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { getSingleUser } from '../../features/userSlice';
-import { handlePrice } from '../../features/cartSlice';
+import { clearCart, handlePrice } from '../../features/cartSlice';
 
 const CheckoutPage = () => {
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { userLocal, loading } = useSelector(state => state.user);
   const { user } = useSelector(state => state.auth);
   const { cartData, totalSubPrice, shippingPrice, totalPrice } = useSelector(state => state.cart);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!cartData.length) return;
@@ -119,7 +119,7 @@ const CheckoutPage = () => {
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!inputData.phoneNumber) {
@@ -151,8 +151,23 @@ const CheckoutPage = () => {
 
     const url = `https://api.whatsapp.com/send?phone=${import.meta.env.VITE_NUMBER}&text=${encodeURIComponent(message)}`;
 
-    window.open(url, "_blank"); // opens WhatsApp
+    try {
+      await dispatch(clearCart()).unwrap();
+      toast.success("Order placed successfully! Redirecting to WhatsApp...");
+      window.open(url, "_blank"); // opens WhatsApp
+      navigate("/products");
+    } catch (error) {
+      toast.error("Failed to open WhatsApp. Please try again.");
+    }
   };
+
+  if(loading || !userLocal){
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#0ea5e9] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

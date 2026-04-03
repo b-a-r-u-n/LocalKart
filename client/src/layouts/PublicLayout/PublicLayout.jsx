@@ -18,33 +18,33 @@ const PublicLayout = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await dispatch(getCartData()).unwrap();        
-      } catch (error) {
-        console.log(error.message || "Failed to fetch cart data");
-        // toast.error(error.message || "Failed to fetch cart data");
-      }
-    }
-    fetchData();
-  }, [dispatch])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       await dispatch(getCartData()).unwrap();        
+  //     } catch (error) {
+  //       console.log(error.message || "Failed to fetch cart data");
+  //       // toast.error(error.message || "Failed to fetch cart data");
+  //     }
+  //   }
+  //   fetchData();
+  // }, [dispatch])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await dispatch(checkAuth()).unwrap();
-      } catch (error) {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       await dispatch(checkAuth()).unwrap();
+  //     } catch (error) {
         
-        console.log(error?.message || "Authentication failed");
+  //       console.log(error?.message || "Authentication failed");
         
-        // toast.error(error.message || "Authentication failed");
-      }
-    }
-    fetchData();
-    // console.log("Hyy");
+  //       // toast.error(error.message || "Authentication failed");
+  //     }
+  //   }
+  //   fetchData();
+  //   console.log("Hyy");
     
-  }, [])
+  // }, [])
   
   
   if (authLoading || loading) return (    
