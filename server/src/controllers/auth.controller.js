@@ -3,14 +3,21 @@ import asyncHandler from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js"
 import apiResponse from "../utils/apiResponse.js";
 
+//production
 const options = {
     httpOnly: true,
-    secure: true, // false
-    sameSite: 'None', // lax
-    // path: "/",
-    // domain: "partnerships-developed-pour-election.trycloudflare.com",
+    secure: true,
+    sameSite: 'None',
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 }
+
+//local
+// const options = {
+//     httpOnly: true,
+//     secure: false,
+//     sameSite: "lax",
+//     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+// }
 
 const generateAccessRefreshTokens = async (userId) => {
 
