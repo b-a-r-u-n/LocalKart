@@ -147,21 +147,38 @@ const CheckoutPage = () => {
       return
     }
 
-    const message = generateWhatsAppMessage();
+    // const message = generateWhatsAppMessage();
 
-    const url = `https://api.whatsapp.com/send?phone=${import.meta.env.VITE_NUMBER}&text=${encodeURIComponent(message)}`;
+    // const url = `https://api.whatsapp.com/send?phone=${import.meta.env.VITE_NUMBER}&text=${encodeURIComponent(message)}`;
+
+    // try {
+    //   toast.success("Order placed successfully! Redirecting to WhatsApp...");
+    //   window.open(url, "_blank"); // opens WhatsApp
+    //   await dispatch(clearCart()).unwrap();
+    const message = generateWhatsAppMessage();
+    const phone = import.meta.env.VITE_NUMBER; // e.g. 919876543210
+
+    const whatsappAppUrl = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`;
+    const whatsappWebUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
     try {
       await dispatch(clearCart()).unwrap();
-      toast.success("Order placed successfully! Redirecting to WhatsApp...");
-      window.open(url, "_blank"); // opens WhatsApp
+      toast.success("Order placed! Opening WhatsApp...");
+
+      // Try opening WhatsApp app (mobile)
+      window.location.href = whatsappAppUrl;
+
+      // Fallback to web after slight delay
+      setTimeout(() => {
+        window.open(whatsappWebUrl, "_blank");
+      }, 1000);
       navigate("/products");
     } catch (error) {
       toast.error("Failed to open WhatsApp. Please try again.");
     }
   };
 
-  if(loading || !userLocal){
+  if (loading || !userLocal) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-[#0ea5e9] border-t-transparent rounded-full animate-spin"></div>
