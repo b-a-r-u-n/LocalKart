@@ -111,9 +111,9 @@ const AddProductPage = () => {
       setInputData({
         name: "",
         description: "",
-        discountPrice: 0,
-        originalPrice: 0,
-        stock: 0
+        discountPrice: null,
+        originalPrice: null,
+        stock: null
 
       })
     } catch (error) {
@@ -197,7 +197,7 @@ const AddProductPage = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Discount Price ($)"
+              label="Discount Price (₹)"
               type="number"
               name="discountPrice"
               placeholder="0.00"
@@ -208,7 +208,7 @@ const AddProductPage = () => {
             />
 
             <Input
-              label="Original Price ($)"
+              label="Original Price (₹)"
               type="number"
               name="originalPrice"
               placeholder="0.00"
