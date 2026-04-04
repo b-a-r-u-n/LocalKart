@@ -149,9 +149,7 @@ const CheckoutPage = () => {
 
     const message = generateWhatsAppMessage();
 
-    // const url = `https://api.whatsapp.com/send?phone=${import.meta.env.VITE_NUMBER}&text=${encodeURIComponent(message)}`;
-
-    const url = `https://wa.me/${import.meta.env.VITE_NUMBER}?text=${encodeURIComponent(message)}`
+    const url = `https://api.whatsapp.com/send?phone=${import.meta.env.VITE_NUMBER}&text=${encodeURIComponent(message)}`;
 
     try {
       toast.success("Order placed successfully! Redirecting to WhatsApp...");
