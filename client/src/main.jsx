@@ -7,34 +7,38 @@ import store from './app/store.js'
 import { MantineProvider } from '@mantine/core'
 import "@mantine/core/styles.css";
 import { Toaster } from 'react-hot-toast'
+
+
 import GuestRoute from './components/GuestRoute/GuestRoute.jsx'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx'
+
+
 import { checkAuth } from './features/authSlice.js'
 import { getCartData } from './features/cartSlice.js'
 
 // layouts
-const AdminLayout = lazy(() => import("./layouts/index.js"));
-const ProfileLayout = lazy(() => import("./layouts/index.js"));
-const PublicLayout = lazy(() => import("./layouts/index.js"));
+const AdminLayout = lazy(() => import("./layouts/AdminLayout/AdminLayout.jsx"));
+const ProfileLayout = lazy(() => import("./layouts/ProfileLayout/ProfileLayout.jsx"));
+const PublicLayout = lazy(() => import("./layouts/PublicLayout/PublicLayout.jsx"));
 
 // public pages
-const ProductsPage = lazy(() => import("./pages/index.js"));
-const ProductDetailsPage = lazy(() => import("./pages/index.js"));
-const ProfilePage = lazy(() => import("./pages/index.js"));
-const EditAndAddAddress = lazy(() => import("./pages/index.js"));
-const CartPage = lazy(() => import("./pages/index.js"));
-const CheckoutPage = lazy(() => import("./pages/index.js"));
-const SignupPage = lazy(() => import("./pages/index.js"));
-const LoginPage = lazy(() => import("./pages/index.js"));
-const NotFoundPage = lazy(() => import("./pages/index.js"));
-const UpdateUserProfilePage = lazy(() => import("./pages/index.js"));
+const ProductsPage = lazy(() => import("./pages/ProductsPage/ProductsPage.jsx"));
+const ProductDetailsPage = lazy(() => import("./pages/ProductDetailsPage/ProductDetailsPage.jsx"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage.jsx"));
+const EditAndAddAddress = lazy(() => import("./pages/EditAndAddAddress/EditAndAddAddress.jsx"));
+const CartPage = lazy(() => import("./pages/CartPage/CartPage.jsx"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage/CheckoutPage.jsx"));
+const SignupPage = lazy(() => import("./pages/SignupPage/SignupPage.jsx"));
+const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage.jsx"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage.jsx"));
+const UpdateUserProfilePage = lazy(() => import("./pages/UpdateUserProfilePage/UpdateUserProfilePage.jsx"));
 
 // Admin
-const DashboardPage = lazy(() => import("./pages/ADMIN/index.js"));
-const AddProductPage = lazy(() => import("./pages/ADMIN/index.js"));
-const ManageProductsPage = lazy(() => import("./pages/ADMIN/index.js"));
-const ManageUsersPage = lazy(() => import("./pages/ADMIN/index.js"));
-const UpdateProductPage = lazy(() => import("./pages/ADMIN/index.js"));
+const DashboardPage = lazy(() => import("./pages/ADMIN/DashboardPage/DashboardPage.jsx"));
+const AddProductPage = lazy(() => import("./pages/ADMIN/AddProductPage/AddProductPage.jsx"));
+const ManageProductsPage = lazy(() => import("./pages/ADMIN/ManageProductsPage/ManageProductsPage.jsx"));
+const ManageUsersPage = lazy(() => import("./pages/ADMIN/ManageUsersPage/ManageUsersPage.jsx"));
+const UpdateProductPage = lazy(() => import("./pages/ADMIN/UpdateProductPage/UpdateProductPage.jsx"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
