@@ -1,30 +1,47 @@
-import { StrictMode, useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, useNavigate } from 'react-router-dom'
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import store from './app/store.js'
 import { MantineProvider } from '@mantine/core'
 import "@mantine/core/styles.css";
-import AdminLayout from './layouts/AdminLayout/AdminLayout.jsx'
-import AddProductPage from './pages/ADMIN/AddProductPage/AddProductPage.jsx'
-import { DashboardPage, ManageProductsPage, ManageUsersPage, UpdateProductPage } from './pages/ADMIN/index.js'
-import PublicLayout from './layouts/PublicLayout/PublicLayout.jsx'
-import { CartPage, CheckoutPage, EditAndAddAddress, HomePage, LoginPage, NotFoundPage, ProductsPage, ProfilePage, SignupPage, UpdateUserProfilePage } from './pages/index.js'
-import ProductDetailsPage from './pages/ProductDetailsPage/ProductDetailsPage.jsx'
 import { Toaster } from 'react-hot-toast'
 import GuestRoute from './components/GuestRoute/GuestRoute.jsx'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx'
 import { checkAuth } from './features/authSlice.js'
-import ProfileLayout from './layouts/ProfileLayout/ProfileLayout.jsx'
 import { getCartData } from './features/cartSlice.js'
+
+// layouts
+const AdminLayout = lazy(() => import("./layouts/index.js"));
+const ProfileLayout = lazy(() => import("./layouts/index.js"));
+const PublicLayout = lazy(() => import("./layouts/index.js"));
+
+// public pages
+const ProductsPage = lazy(() => import("./pages/index.js"));
+const ProductDetailsPage = lazy(() => import("./pages/index.js"));
+const ProfilePage = lazy(() => import("./pages/index.js"));
+const EditAndAddAddress = lazy(() => import("./pages/index.js"));
+const CartPage = lazy(() => import("./pages/index.js"));
+const CheckoutPage = lazy(() => import("./pages/index.js"));
+const SignupPage = lazy(() => import("./pages/index.js"));
+const LoginPage = lazy(() => import("./pages/index.js"));
+const NotFoundPage = lazy(() => import("./pages/index.js"));
+const UpdateUserProfilePage = lazy(() => import("./pages/index.js"));
+
+// Admin
+const DashboardPage = lazy(() => import("./pages/ADMIN/index.js"));
+const AddProductPage = lazy(() => import("./pages/ADMIN/index.js"));
+const ManageProductsPage = lazy(() => import("./pages/ADMIN/index.js"));
+const ManageUsersPage = lazy(() => import("./pages/ADMIN/index.js"));
+const UpdateProductPage = lazy(() => import("./pages/ADMIN/index.js"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<PublicLayout />}>
         {/* <Route index element={<HomePage />} /> */}
-        <Route index  element={<ProductsPage />} />
+        <Route index element={<ProductsPage />} />
         <Route path="products" element={<ProductsPage />} />
         <Route path="product/:id" element={<ProductDetailsPage />} />
         <Route path=":id/profile" element={
@@ -36,7 +53,11 @@ const router = createBrowserRouter(
           <Route path="address/add" element={<EditAndAddAddress />} />
           <Route path="address/:addressId/edit" element={<EditAndAddAddress />} />
         </Route>
-        <Route path="cart" element={<CartPage />} />
+        <Route path="cart" element={
+          <ProtectedRoute>
+            <CartPage />
+          </ProtectedRoute>
+        } />
         <Route path="checkout" element={<ProtectedRoute>
           <CheckoutPage />
         </ProtectedRoute>} />
@@ -80,17 +101,27 @@ const AppWrapper = () => {
   const { isLoggedIn, user } = useSelector(state => state.auth);
 
   useEffect(() => {
-    
+
     dispatch(checkAuth()); // ✅ runs on every route
     // dispatch(getCartData()); // ✅ runs on every route
   }, []);
 
   useEffect(() => {
-    if(isLoggedIn)
+    if (isLoggedIn)
       dispatch(getCartData());
   }, [isLoggedIn])
 
-  return <RouterProvider router={router} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-[#0ea5e9] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      }
+    >
+      <RouterProvider router={router} />
+    </Suspense>
+  )
 }
 
 
