@@ -62,6 +62,7 @@ const CartCard = ({ item }) => {
                     src={item?.productId?.images[0]?.url}
                     alt={item?.productId?.name}
                     className="w-24 h-24 object-cover rounded-lg"
+                    loading='lazy'
                 />
                 <div className="flex-1">
                     <Link

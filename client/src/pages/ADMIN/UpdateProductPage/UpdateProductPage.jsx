@@ -261,6 +261,7 @@ const UpdateProductPage = () => {
                                     <img
                                         src={image.url || image}
                                         className="w-full h-80 lg:h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                                        loading='lazy'
                                     />
 
                                     {/* Remove Button */}

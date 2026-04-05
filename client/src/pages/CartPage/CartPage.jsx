@@ -78,51 +78,6 @@ const CartPage = () => {
               {
                 cartData &&
                 cartData?.map((item, index) => (
-                  // <Card key={item._id} className="p-6">
-                  //   <div className="flex gap-4">
-                  //     <img
-                  //       src={item?.productId?.images[0]?.url}
-                  //       alt={item?.productId?.name}
-                  //       className="w-24 h-24 object-cover rounded-lg"
-                  //     />
-                  //     <div className="flex-1">
-                  //       <Link
-                  //         to={`/product/${item?.productId?._id}`}
-                  //         className="hover:text-[#0ea5e9]">
-                  //         <h3 className="mb-2">{item?.productId?.name}</h3>
-                  //       </Link>
-                  //       <p className="text-2xl text-[#111827] mb-2">₹ {item?.productId?.discountPrice}</p>
-                  //       <div className="flex items-center gap-4">
-                  //         <div className="flex items-center border border-[#e5e7eb] rounded-lg">
-                  //           <button
-                  //             className="px-3 py-1 hover:bg-gray-100 transition-colors cursor-pointer"
-                  //             onClick={handleQuantity}
-                  //           >
-                  //             <Minus size={16} />
-                  //           </button>
-                  //           <span className="px-4 py-1 border-x border-[#e5e7eb]">{item.quantity}</span>
-                  //           <button
-                  //             className="px-3 py-1 hover:bg-gray-100 transition-colors"
-                  //             onClick={handleQuantity}
-                  //           >
-                  //             <Plus size={16} />
-                  //           </button>
-                  //         </div>
-                  //         <button
-                  //           onClick={() => handleRemove(item.productId._id)}
-                  //           className="text-red-500 hover:text-red-600 transition-colors cursor-pointer"
-                  //         >
-                  //           <Trash2 size={20} />
-                  //         </button>
-                  //       </div>
-                  //     </div>
-                  //     <div className="text-right">
-                  //       <p className="text-xl text-[#111827]">
-                  //         {item.productId.discountPrice * item.quantity}
-                  //       </p>
-                  //     </div>
-                  //   </div>
-                  // </Card>
                   <CartCard key={item._id} item={item} />
                 ))}
             </div>

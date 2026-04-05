@@ -161,6 +161,7 @@ const AddProductPage = () => {
                   <img
                     src={src}
                     className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading='lazy'
                   />
 
                   {/* Remove Button */}

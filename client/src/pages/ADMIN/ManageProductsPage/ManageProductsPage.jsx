@@ -91,6 +91,7 @@ const ManageProductsPage = () => {
                         src={product.images[0].url}
                         alt={product.name}
                         className="w-12 h-12 object-cover rounded"
+                        loading='lazy'
                       />
                       <div>
                         <p className="text-sm text-[#111827]">{product.name}</p>

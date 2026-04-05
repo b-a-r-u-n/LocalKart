@@ -30,6 +30,7 @@ const ProductCarousel = ({ images = [] }) => {
           src={images[current]?.url}
           alt="product"
           className="w-full h-full object-cover rounded-lg transition-all duration-500"
+          loading="lazy"
         />
       </div>
 
@@ -58,6 +59,7 @@ const ProductCarousel = ({ images = [] }) => {
                 ? "border-black scale-105"
                 : "border-gray-200"
             }`}
+            loading="lazy"
           />
         ))}
       </div>
