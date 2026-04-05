@@ -15,11 +15,12 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx'
 
 import { checkAuth } from './features/authSlice.js'
 import { getCartData } from './features/cartSlice.js'
+import { AdminLayout, ProfileLayout, PublicLayout } from './layouts/index.js'
 
 // layouts
-const AdminLayout = lazy(() => import("./layouts/AdminLayout/AdminLayout.jsx"));
-const ProfileLayout = lazy(() => import("./layouts/ProfileLayout/ProfileLayout.jsx"));
-const PublicLayout = lazy(() => import("./layouts/PublicLayout/PublicLayout.jsx"));
+// const AdminLayout = lazy(() => import("./layouts/AdminLayout/AdminLayout.jsx"));
+// const ProfileLayout = lazy(() => import("./layouts/ProfileLayout/ProfileLayout.jsx"));
+// const PublicLayout = lazy(() => import("./layouts/PublicLayout/PublicLayout.jsx"));
 
 // public pages
 const ProductsPage = lazy(() => import("./pages/ProductsPage/ProductsPage.jsx"));
@@ -105,8 +106,11 @@ const AppWrapper = () => {
   const { isLoggedIn, user } = useSelector(state => state.auth);
 
   useEffect(() => {
+    setTimeout(() => {
+    dispatch(checkAuth());
+  }, 0);
 
-    dispatch(checkAuth()); // ✅ runs on every route
+    // dispatch(checkAuth()); // ✅ runs on every route
     // dispatch(getCartData()); // ✅ runs on every route
   }, []);
 
