@@ -11,7 +11,7 @@ const GuestRoute = ({ children }) => {
     </div>
   );
 
-  if (isLoggedIn) return <Navigate to="/" replace />;
+  if (isLoggedIn) return <Navigate to="/products" replace />;
 
   return children;
 }
