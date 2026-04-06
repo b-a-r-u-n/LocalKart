@@ -55,7 +55,7 @@ const ProductCard = ({ product }) => {
           <img
             src={product.images[0].url}
             alt={product.name}
-            className="w-full h-64 object-cover"
+            className="w-full h-64 object-contain object-center"
             loading='lazy'
           />
         </div>

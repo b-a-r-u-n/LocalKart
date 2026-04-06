@@ -29,7 +29,7 @@ const ProductCarousel = ({ images = [] }) => {
         <img
           src={images[current]?.url}
           alt="product"
-          className="w-full h-full object-cover rounded-lg transition-all duration-500"
+          className="w-full h-full object-contain rounded-lg transition-all duration-500"
           loading="lazy"
         />
       </div>
@@ -54,7 +54,7 @@ const ProductCarousel = ({ images = [] }) => {
             key={index}
             src={img.url}
             onClick={() => setCurrent(index)}
-            className={`h-16 w-16 object-cover rounded-md cursor-pointer border-2 transition ${
+            className={`h-16 w-16 object-contain rounded-md cursor-pointer border-2 transition ${
               current === index
                 ? "border-black scale-105"
                 : "border-gray-200"
