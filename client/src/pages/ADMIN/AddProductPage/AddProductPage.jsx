@@ -87,6 +87,10 @@ const AddProductPage = () => {
       toast.error("Original price must be greater than zero")
       return;
     }
+    console.log(inputData.discountPrice);
+    console.log(inputData.originalPrice);
+    
+    
 
     if(inputData.discountPrice > inputData.originalPrice) {
       toast.error("Discount price cannot be greater than original price");
