@@ -87,17 +87,13 @@ const AddProductPage = () => {
       toast.error("Original price must be greater than zero")
       return;
     }
-    console.log(inputData.discountPrice);
-    console.log(inputData.originalPrice);
-    
-    
 
-    if(inputData.discountPrice > inputData.originalPrice) {
+    if(Number(inputData.discountPrice) > Number(inputData.originalPrice)) {
       toast.error("Discount price cannot be greater than original price");
       return;
     }
 
-    if (!inputData.stock || inputData.stock <= 0) {
+    if (!Number(inputData.stock) || Number(inputData.stock) <= 0) {
       toast.error("Stock must be greater than zero");
       return;
     }
