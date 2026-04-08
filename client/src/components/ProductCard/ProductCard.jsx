@@ -47,7 +47,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <Card className="overflow-hidden">
-
+{/* <Card className="overflow-hidden w-full"> */}
       <Link to={`/product/${product._id}`}>
 
         <div className="relative">
