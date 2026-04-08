@@ -25,15 +25,15 @@ const ProductCard = ({ product }) => {
       });
       return;
     }
-    
+
     try {
-          const result = await dispatch(addToCart({productId: product._id})).unwrap();
-          // console.log(result);      
-          toast.success(result.message || "Product added to cart");
-        } catch (error) {
-          // console.log(error);
-          toast.error(error.message || "Failed to add product to cart");
-        }
+      const result = await dispatch(addToCart({ productId: product._id })).unwrap();
+      // console.log(result);      
+      toast.success(result.message || "Product added to cart");
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.message || "Failed to add product to cart");
+    }
   };
 
   if (loading) {
@@ -47,10 +47,16 @@ const ProductCard = ({ product }) => {
 
   return (
     <Card className="overflow-hidden">
-{/* <Card className="overflow-hidden w-full"> */}
+
       <Link to={`/product/${product._id}`}>
 
         <div className="relative">
+          <span className="absolute top-4 left-4 bg-red-500 text-white text-sm px-3 py-1 rounded">
+            {Math.round(
+              ((product.originalPrice - product.discountPrice) / product.originalPrice) * 100
+            )}% OFF
+
+          </span>
 
           <img
             src={product.images[0].url}

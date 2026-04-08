@@ -35,7 +35,7 @@ const ProductsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen max-w-full bg-gray-50">
       <div className="w-full bg-white py-6">
 
         {/* <h1 className="text-3xl mb-6 px-6 lg:px-16 text-[#111827]">
@@ -111,44 +111,75 @@ const ProductsPage = () => {
           ))}
         </Swiper>
       </div>
-      <div className="max-w-7xl mx-auto px-4 pb-6">
-        <h1 className="text-3xl mb-4 text-[#111827]">All Products</h1>
-        <NavLink
-          to="/products"
-          className={() => `text-sm md:text-lg lg:text-xl bg-[#0ea5e9] text-white py-1 px-5 rounded-xl font-semibold`}
-        >
-          All
-        </NavLink>
+      {
+        products.length > 0 ?
+          (
+            <div className="max-w-7xl mx-auto px-4 pb-6">
+              <h1 className="text-3xl mb-4 text-[#111827]">All Products</h1>
+              <NavLink
+                to="/products"
+                className={() => `text-sm md:text-lg lg:text-xl bg-[#0ea5e9] text-white py-1 px-5 rounded-xl font-semibold`}
+              >
+                All
+              </NavLink>
 
-        <div className="flex gap-6">
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-6">
-              <p className="text-gray-600"></p>
+              <div className="flex gap-6 mt-5">
+                <div className="flex-1">
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {
+                      products &&
+                      products.map((product) => (
+                        <ProductCard
+                          key={product._id}
+                          product={product}
+                        />
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+          :
+          (
+            <div className="min-h-[300px] flex flex-col items-center justify-center text-center bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+
+              {/* Icon */}
+              <div className="w-20 h-20 flex items-center justify-center rounded-full bg-[#e0f2fe] mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-10 h-10 text-[#0ea5e9]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h18M9 3v18m6-18v18M4 7h16M4 17h16" />
+                </svg>
+              </div>
+
+              {/* Title */}
+              <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+                No Products Found
+              </h2>
+
+              {/* Subtitle */}
+              <p className="text-gray-500 mb-5 max-w-sm">
+                Looks like we couldn’t find any products right now. Try refreshing or check back later.
+              </p>
+
+              {/* Button */}
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-[#0ea5e9] hover:bg-[#0284c7] text-white px-5 py-2 rounded-lg transition"
+              >
+                Refresh
+              </button>
+
             </div>
 
-            {/* <div className="w-full flex overflow-x-auto gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:overflow-visible"> */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {
-                products &&
-                products.map((product) => (
-                  <ProductCard
-                    key={product._id}
-                    product={product}
-                  />
-                ))}
-            </div>
-
-            {/* <div className="flex overflow-x-auto gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:overflow-visible">
-  {products &&
-    products.map((product) => (
-      <div key={product._id} className="min-w-[75%] sm:min-w-[45%] md:min-w-0">
-        <ProductCard product={product} />
-      </div>
-    ))}
-</div> */}
-          </div>
-        </div>
-      </div>
+          )
+      }
     </div>
   )
 }
