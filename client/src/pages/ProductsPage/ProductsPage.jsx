@@ -43,73 +43,86 @@ const ProductsPage = () => {
         </h1> */}
 
         <Swiper
-          modules={[Autoplay]}
-          slidesPerView={1}
-          loop
-          speed={900}
-          autoplay={{
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          }}
-        >
-          {products.slice(-5).reverse().map((product) => (
-            <SwiperSlide key={product._id}>
+  modules={[Autoplay]}
+  slidesPerView={1}
+  loop
+  speed={900}
+  autoplay={{
+    delay: 3500,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: true,
+  }}
+>
+  {products.slice(-5).reverse().map((product) => (
+    <SwiperSlide key={product._id}>
+      <div className="flex justify-center w-full">
+        <div className="relative w-full max-w-7xl h-[220px] md:h-[420px] lg:h-[480px] rounded-2xl overflow-hidden">
 
-              <div className="flex justify-center w-full">
-                <div className="relative w-full max-w-7xl h-[200px] md:h-[420px] lg:h-[480px] rounded-2xl overflow-hidden">
+          {/* Image */}
+          <img
+            src={product?.images?.[0]?.url}
+            className="w-full h-full object-contain object-right"
+          />
 
-                  {/* 🔥 Image (IMPORTANT FIX) */}
-                  <img
-                    src={product?.images?.[0]?.url}
-                    className="w-full h-full object-contain object-right"
-                  />
+          {/* 🔥 Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent"></div>
 
-                  {/* 🔥 Stronger Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
+          {/* 🔥 NEW LAUNCH Badge */}
+          <div className="absolute top-4 left-4 flex items-center gap-2">
+            <span className="bg-yellow-400 text-black text-xs md:text-sm font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
+              🚀 NEW LAUNCH
+            </span>
 
-                  {/* 🔥 Content */}
-                  <div className="absolute top-[60%] left-8 md:left-16 transform -translate-y-1/2 text-white max-w-lg">
+            <span className="bg-red-500 text-white text-xs md:text-sm px-3 py-1 rounded-full">
+              {Math.round(
+                ((product.originalPrice - product.discountPrice) / product.originalPrice) * 100
+              )}% OFF
+            </span>
+          </div>
 
-                    {/* Title (BIG on large screens) */}
-                    <h2 className="text-xl md:text-4xl lg:text-5xl font-bold mb-3 leading-tight">
-                      {product.name}
-                    </h2>
+          {/* Content */}
+          <div className="absolute top-[60%] left-8 md:left-16 transform -translate-y-1/2 text-white max-w-lg">
 
-                    {/* Price */}
-                    <div className="flex items-center gap-3 text-lg md:text-xl mb-4">
-                      <span className="font-bold text-2xl">
-                        ₹{product.discountPrice}
-                      </span>
-                      <span className="line-through text-gray-300">
-                        ₹{product.originalPrice}
-                      </span>
-                    </div>
+            {/* Subtitle */}
+            <p className="text-yellow-400 font-semibold mb-2 tracking-wide uppercase text-xs md:text-sm">
+              Just Launched
+            </p>
 
-                    {/* 🔥 CTA BUTTON (THIS FIXES EMPTY SPACE FEEL) */}
-                    <Link>
-                      <Button
-                        variant="primary" className="flex-1 cursor-pointer font-semibold hover:scale-105 transition">
-                        Shop Now
-                      </Button>
-                    </Link>
+            {/* Title */}
+            <h2 className="text-xl md:text-4xl lg:text-5xl font-bold mb-3 leading-tight">
+              {product.name}
+            </h2>
 
-                  </div>
+            {/* Price */}
+            <div className="flex items-center gap-3 text-lg md:text-xl mb-5">
+              <span className="font-bold text-2xl text-green-400">
+                ₹{product.discountPrice}
+              </span>
+              <span className="line-through text-gray-300">
+                ₹{product.originalPrice}
+              </span>
+            </div>
 
-                  {/* Badge */}
-                  <span className="absolute top-4 left-4 bg-red-500 text-white text-sm px-3 py-1 rounded">
-                    {Math.round(
-                      ((product.originalPrice - product.discountPrice) / product.originalPrice) * 100
-                    )}% OFF
+            {/* CTA */}
+            <Link to={`/product/${product._id}`}>
+              <Button
+                variant="primary"
+                className="px-6 py-3 font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-all"
+              >
+                Explore Now →
+              </Button>
+            </Link>
 
-                  </span>
+          </div>
 
-                </div>
-              </div>
+          {/* 🔥 Glow Effect (Premium Feel) */}
+          <div className="absolute left-0 top-0 w-40 h-40 bg-yellow-400/20 blur-3xl rounded-full"></div>
 
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        </div>
+      </div>
+    </SwiperSlide>
+  ))}
+</Swiper>
       </div>
       {
         products.length > 0 ?
