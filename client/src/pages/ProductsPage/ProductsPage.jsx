@@ -116,7 +116,7 @@ const ProductsPage = () => {
                   </div>
 
                   {/* 🔥 Glow Effect (Premium Feel) */}
-                  <div className="absolute left-0 top-0 w-40 h-40 md:w-72 md:h-72 bg-yellow-400/10 md:bg-yellow-400/20 blur-2xl md:blur-3xl rounded-full">
+                  <div className="absolute left-0 top-0 w-40 h-40 md:w-72 md:h-72 bg-yellow-400/10 md:bg-yellow-400/20 blur-3xl md:blur-3xl rounded-full">
                   </div>
 
                 </div>
