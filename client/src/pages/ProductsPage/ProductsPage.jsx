@@ -112,10 +112,10 @@ const ProductsPage = () => {
         </Swiper>
       </div>
       <div className="max-w-7xl mx-auto px-4 pb-6">
-        <h1 className="text-3xl mb-6 text-[#111827]">All Products</h1>
+        <h1 className="text-3xl mb-4 text-[#111827]">All Products</h1>
         <NavLink
           to="/products"
-          className={() => `text-xl bg-[#0ea5e9] text-white py-1 px-5 rounded-xl font-semibold`}
+          className={() => `text-sm md:text-lg lg:text-xl bg-[#0ea5e9] text-white py-1 px-5 rounded-xl font-semibold`}
         >
           All
         </NavLink>
