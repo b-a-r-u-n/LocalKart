@@ -6,12 +6,12 @@ import { Button } from '../../components/Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '../../features/productSlice';
 import toast from 'react-hot-toast';
-import { addToCart, getCartData } from '../../features/cartSlice';
+import { addToCart, getCartData, handleBuy } from '../../features/cartSlice';
 
 const ProductDetailsPage = () => {
 
   const { product, loading } = useSelector(state => state.product);
-  const {isLoggedIn} = useSelector(state => state.auth);
+  const { isLoggedIn } = useSelector(state => state.auth);
 
   const { id } = useParams();
 
@@ -20,6 +20,10 @@ const ProductDetailsPage = () => {
   const dispatch = useDispatch();
 
   const [quantity, setQuantity] = useState(1);
+
+  const [selectedSize, setSelectedSize] = useState("");
+
+  const sizeOrder = ["S", "M", "L", "XL", "XXL"];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,16 +67,59 @@ const ProductDetailsPage = () => {
       return;
     }
 
+    if(product?.sizes?.length > 0 && !selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+
     try {
-      const result = await dispatch(addToCart({productId: product._id, quantity})).unwrap();
+      const result = await dispatch(addToCart({ productId: product._id, quantity, size: selectedSize })).unwrap();
       // console.log(result);      
       toast.success(result.message || "Product added to cart");
     } catch (error) {
       // console.log(error);
-      
+
       toast.error(error.message || "Failed to add product to cart");
     }
   }
+  
+  const handleBuyNow = () => {
+    if (!isLoggedIn) {
+      toast.error("Please log in to add items to cart");
+      navigate("/login", {
+        state: { from: location.pathname }
+      });
+      return;
+    }
+    
+    if(product?.sizes?.length > 0 && !selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+    
+    dispatch(handleBuy({product, quantity, size: selectedSize}));
+    navigate("/checkout");
+  }
+
+  const getDisplayStock = () => {
+    if (!product?.sizes || product?.sizes?.length === 0) {
+      return product.stock; // no sizes → normal stock
+    }
+
+    if (!selectedSize) {
+      // no size selected → show total stock
+      return product.stock;
+    }
+
+    // find selected size stock
+    const selected = product.sizes.find(
+      (s) => (s.size || s) === selectedSize
+    );
+
+    return selected?.stock ?? 0;
+  };
+
+  const displayStock = getDisplayStock();
 
   if (loading) {
     return (
@@ -125,10 +172,54 @@ const ProductDetailsPage = () => {
 
             <p className="text-gray-700 mb-6">{product.description}</p>
 
+            {product?.sizes?.length > 0 && (
+              <div className="flex gap-2 mb-3 flex-wrap">
+                {[...product.sizes]
+                  .sort((a, b) => {
+                    const sizeA = (a.size || a).toUpperCase();
+                    const sizeB = (b.size || b).toUpperCase();
+
+                    return sizeOrder.indexOf(sizeA) - sizeOrder.indexOf(sizeB);
+                  })
+                  .map((sizeObj, index) => {
+                    const size = sizeObj.size || sizeObj;
+                    const isOutOfStock = sizeObj.stock === 0;
+
+                    return (
+                      <button
+                        key={index}
+                        disabled={isOutOfStock}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelectedSize(size);
+                        }}
+                        className={`px-3 py-1 border rounded-md text-sm transition cursor-pointer ${selectedSize === size
+                          ? "bg-black text-white border-black"
+                          : "bg-white text-gray-700 hover:border-black"
+                          } ${isOutOfStock
+                            ? "opacity-40 cursor-not-allowed line-through"
+                            : ""
+                          }`}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
+              </div>
+            )}
 
             <div className="mb-6">
-              <Badge variant={product.stock && product.stock > 0 ? 'success' : 'error'}>
+              {/* <Badge variant={product.stock && product.stock > 0 ? 'success' : 'error'}>
                 {product.stock && product.stock > 0 ? `In Stock (${product.stock} available)` : 'Out of Stock'}
+              </Badge> */}
+              <Badge variant={displayStock > 0 ? 'success' : 'error'}>
+                {displayStock > 0
+                  ? selectedSize
+                    ? `${displayStock} available`
+                    : `In Stock (${displayStock} available)`
+                  : selectedSize
+                    ? `${selectedSize} Size: Out of Stock`
+                    : 'Out of Stock'}
               </Badge>
             </div>
 
@@ -156,11 +247,15 @@ const ProductDetailsPage = () => {
               </Button>
             </div>
 
-            <Link to="/checkout">
-              <Button variant="accent" className="w-full mb-6 cursor-pointer">
+            {/* <Link to="/checkout"> */}
+              <Button 
+                variant="accent" 
+                className="w-full mb-6 cursor-pointer"
+                onClick={handleBuyNow}
+              >
                 Buy Now
               </Button>
-            </Link>
+            {/* </Link> */}
 
             <div className="grid grid-cols-3 gap-4">
               <Card className="p-4 text-center">

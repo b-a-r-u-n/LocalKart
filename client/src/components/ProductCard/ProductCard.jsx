@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Card from '../Card/Card';
 import { Link, useNavigate } from 'react-router-dom';
 import { Heart, ShoppingCart, Star } from 'lucide-react';
@@ -16,6 +16,10 @@ const ProductCard = ({ product }) => {
 
   const dispatch = useDispatch();
 
+  const [selectedSize, setSelectedSize] = useState("");
+
+  const sizeOrder = ["S", "M", "L", "XL", "XXL"];
+
 
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
@@ -26,8 +30,13 @@ const ProductCard = ({ product }) => {
       return;
     }
 
+    if(product.sizes.length > 0 && !selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+
     try {
-      const result = await dispatch(addToCart({ productId: product._id })).unwrap();
+      const result = await dispatch(addToCart({ productId: product._id, size: selectedSize })).unwrap();
       // console.log(result);      
       toast.success(result.message || "Product added to cart");
     } catch (error) {
@@ -76,6 +85,75 @@ const ProductCard = ({ product }) => {
             {product.name}
           </h3>
         </Link>
+
+        {/* {product.sizes.length > 0 && (
+          <div className="flex gap-2 mb-3 flex-wrap">
+            {product.sizes.map((sizeObj, index) => {
+              const size = sizeObj.size || sizeObj;
+              const isOutOfStock = sizeObj.stock === 0;
+
+              return (
+                <button
+                  key={index}
+                  disabled={isOutOfStock}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSelectedSize(size);
+                  }}
+                  className={`px-3 py-1 border rounded-md text-sm transition cursor-pointer ${
+                    selectedSize === size
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-gray-700 hover:border-black"
+                  } ${
+                    isOutOfStock
+                      ? "opacity-40 cursor-not-allowed line-through"
+                      : ""
+                  }`}
+                >
+                  {size}
+                </button>
+              );
+            })}
+          </div>
+        )} */}
+
+        {product.sizes.length > 0 && (
+  <div className="flex gap-2 mb-3 flex-wrap">
+    {[...product.sizes]
+      .sort((a, b) => {
+        const sizeA = (a.size || a).toUpperCase();
+        const sizeB = (b.size || b).toUpperCase();
+
+        return sizeOrder.indexOf(sizeA) - sizeOrder.indexOf(sizeB);
+      })
+      .map((sizeObj, index) => {
+        const size = sizeObj.size || sizeObj;
+        const isOutOfStock = sizeObj.stock === 0;
+
+        return (
+          <button
+            key={index}
+            disabled={isOutOfStock}
+            onClick={(e) => {
+              e.preventDefault();
+              setSelectedSize(size);
+            }}
+            className={`px-3 py-1 border rounded-md text-sm transition cursor-pointer ${
+              selectedSize === size
+                ? "bg-black text-white border-black"
+                : "bg-white text-gray-700 hover:border-black"
+            } ${
+              isOutOfStock
+                ? "opacity-40 cursor-not-allowed line-through"
+                : ""
+            }`}
+          >
+            {size}
+          </button>
+        );
+      })}
+  </div>
+)}
 
 
         {/* <div className="flex items-center gap-1 mb-2">

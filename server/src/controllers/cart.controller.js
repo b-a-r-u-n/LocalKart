@@ -8,7 +8,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 const addToCart = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
-    const {productId, quantity} = req.body;
+    const {productId, quantity, size} = req.body;
     if(!productId)
         throw new apiError(400, "Product id is required");
 
@@ -22,8 +22,11 @@ const addToCart = asyncHandler(async (req, res) => {
 
     let item = await CartItem.findOne({
         cartId: cart._id,
-        productId
+        productId,
+        size: size
     })
+    console.log(item);
+    
 
     if(item){
         item.quantity += quantity || 1;
@@ -32,7 +35,8 @@ const addToCart = asyncHandler(async (req, res) => {
         item = await CartItem.create({
             cartId: cart._id,
             productId,
-            quantity: quantity || 1
+            quantity: quantity || 1,
+            size: size || null
         })
     }
 
@@ -52,6 +56,7 @@ const deleteFromCart = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
     const {productId} = req.params;
+    const {size} = req.body;
     if(!productId)
         throw new apiError(400, "Product id is required");
 
@@ -60,12 +65,15 @@ const deleteFromCart = asyncHandler(async (req, res) => {
     })
 
     if(!cart)
-        throw new apiError(404, "Cart not found");
+        throw new apiError(404, "Cart not found"); 
 
     const item = await CartItem.findOneAndDelete({
         cartId: cart._id,
-        productId
+        productId,
+        size
     }).populate("productId")
+    console.log(item);
+    
 
     if(!item)
         throw new apiError(404, "Item not found in cart");
@@ -84,8 +92,8 @@ const updateCartItem = asyncHandler(async (req, res) => {
     if(!productId)
         throw new apiError(400, "Product id is required");
 
-    const {quantity} = req.body;
-    // console.log(quantity);
+    // console.log(req.body);
+    const {quantity, size} = req.body;
     
     if(!quantity || quantity < 1)
         throw new apiError(400, "Quantity must be at least 1");
@@ -99,7 +107,8 @@ const updateCartItem = asyncHandler(async (req, res) => {
     const item = await CartItem.findOneAndUpdate(
         {
             cartId: cart._id,
-            productId
+            productId,
+            size
         },
         {
             $set: {

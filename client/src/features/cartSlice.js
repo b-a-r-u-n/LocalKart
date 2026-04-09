@@ -12,9 +12,9 @@ export const getCartData = createAsyncThunk("getCartData", async (_, { rejectWit
     }
 })
 
-export const addToCart = createAsyncThunk("addToCart", async ({ productId, quantity }, { rejectWithValue }) => {
+export const addToCart = createAsyncThunk("addToCart", async ({ productId, quantity, size }, { rejectWithValue }) => {
     try {
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/cart/add-to-cart`, { productId, quantity }, { withCredentials: true });
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/cart/add-to-cart`, { productId, quantity, size }, { withCredentials: true });
         // console.log("productId", productId);
 
         return response.data;
@@ -23,9 +23,12 @@ export const addToCart = createAsyncThunk("addToCart", async ({ productId, quant
     }
 })
 
-export const removeFromCart = createAsyncThunk("removeFromCart", async (productId, { rejectWithValue }) => {
+export const removeFromCart = createAsyncThunk("removeFromCart", async ({ productId, size }, { rejectWithValue }) => {
     try {
-        const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/cart/${productId}/remove-from-cart`, { withCredentials: true });
+        const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/cart/${productId}/remove-from-cart`, {
+            data: { size },
+            withCredentials: true
+        });
 
         return response.data;
     } catch (error) {
@@ -33,9 +36,9 @@ export const removeFromCart = createAsyncThunk("removeFromCart", async (productI
     }
 })
 
-export const updateCartItem = createAsyncThunk("updateCartItem", async ({ productId, quantity }, { rejectWithValue }) => {
+export const updateCartItem = createAsyncThunk("updateCartItem", async ({ productId, quantity, size }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/cart/${productId}/update-cart`, { quantity }, { withCredentials: true });
+        const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/cart/${productId}/update-cart`, { quantity, size }, { withCredentials: true });
 
         return response.data;
     } catch (error) {
@@ -43,9 +46,9 @@ export const updateCartItem = createAsyncThunk("updateCartItem", async ({ produc
     }
 })
 
-export const clearCart = createAsyncThunk("clearCart", async (_, {rejectWithValue}) => {
+export const clearCart = createAsyncThunk("clearCart", async (_, { rejectWithValue }) => {
     try {
-        const response =await axios.delete(`${import.meta.env.VITE_BASE_URL}/cart/clear-cart`, { withCredentials: true });
+        const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/cart/clear-cart`, { withCredentials: true });
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || error.message);
@@ -55,6 +58,7 @@ export const clearCart = createAsyncThunk("clearCart", async (_, {rejectWithValu
 const initialState = {
     cartData: [],
     cartDataLocal: null,
+    buyItem: null,
     loading: false,
     success: false,
     totalPrice: 0,
@@ -71,6 +75,13 @@ const cartSlice = createSlice({
             state.totalPrice = subTotal + shipping;
             state.shippingPrice = shipping;
             state.totalSubPrice = subTotal;
+        },
+        handleBuy: (state, action) => {
+            const {product, quantity, size} = action.payload;
+            state.buyItem = {...product, quantity, size}
+        },
+        clearBuy: (state, _) => {
+            state.buyItem = null;
         }
     },
     extraReducers: (builder) => {
@@ -83,6 +94,7 @@ const cartSlice = createSlice({
             state.cartData = action.payload.data;
             state.cartDataLocal = action.payload.data;
             state.success = true;
+
             // console.log(state.cartData);
             // console.log("Cart completed");
         })
@@ -103,7 +115,7 @@ const cartSlice = createSlice({
             const newItem = action.payload.data;
 
             const existingItem = state.cartData.find(
-                (item) => item.productId._id === newItem.productId._id
+                (item) => item.productId._id === newItem.productId._id && item.size === newItem.size
             );
 
             if (existingItem) {
@@ -133,7 +145,10 @@ const cartSlice = createSlice({
             state.success = true;
             const removedProductId = action.payload.data;
             state.cartData = state.cartData.filter(
-                (item) => item.productId._id !== removedProductId.productId._id
+                (item) => !(
+                    item.productId._id === removedProductId.productId._id &&
+                    item.size === removedProductId.size
+                )
             );
         })
         builder.addCase(removeFromCart.rejected, (state, _) => {
@@ -148,10 +163,10 @@ const cartSlice = createSlice({
         builder.addCase(updateCartItem.fulfilled, (state, action) => {
             state.loading = false;
             state.success = true;
-            const { productId, quantity } = action.meta.arg;
+            const { productId, quantity, size } = action.meta.arg;
 
             const item = state.cartData.find(
-                (item) => item.productId._id === productId
+                (item) => item.productId._id === productId && item.size === size
             );
 
             if (item) {
@@ -171,6 +186,9 @@ const cartSlice = createSlice({
             state.loading = false;
             state.success = true;
             state.cartData = [];
+            state.totalPrice = 0;
+            state.totalSubPrice = 0;
+            state.shippingPrice = 0;
         })
         builder.addCase(clearCart.rejected, (state, _) => {
             state.loading = false;
@@ -180,6 +198,6 @@ const cartSlice = createSlice({
     }
 })
 
-export const { handlePrice } = cartSlice.actions;
+export const { handlePrice, handleBuy, clearBuy } = cartSlice.actions;
 
 export default cartSlice.reducer;

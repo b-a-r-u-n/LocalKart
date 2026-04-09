@@ -294,6 +294,8 @@ const AppWrapper = () => {
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(getCartData());
+      // console.log(cartData);
+      
     }
   }, [isLoggedIn]);
 

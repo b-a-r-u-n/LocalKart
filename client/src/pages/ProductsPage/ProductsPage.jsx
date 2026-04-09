@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Button, ProductCard } from '../../components'
+import { Button, FeatureStrip, ProductCard } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllProducts } from '../../features/productSlice';
 import toast from 'react-hot-toast';
@@ -124,6 +124,7 @@ const ProductsPage = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+          <FeatureStrip />
       </div>
       {
         products.length > 0 ?

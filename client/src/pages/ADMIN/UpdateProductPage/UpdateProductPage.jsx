@@ -36,12 +36,15 @@ const UpdateProductPage = () => {
         description: "",
         discountPrice: 0,
         originalPrice: 0,
-        stock: 0
+        stock: 0,
+        size: ""
     });
     const [images, setImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
     const [removedImages, setRemovedImages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    const sizeOptions = ["S", "M", "L", "XL", "XXL"]
 
     useEffect(() => {
         if (product) {
@@ -50,12 +53,13 @@ const UpdateProductPage = () => {
                 description: product.description || "",
                 discountPrice: product.discountPrice || 0,
                 originalPrice: product.originalPrice || 0,
-                stock: product.stock || 0
+                stock: product.stock || 0,
+                size: product.sizes && product.sizes.length >  0 ? product.sizes[0].size : ""
             });
 
             // setPreviewImages(product.images || []);
             setPreviewImages(
-                product.images.map((img) => ({
+                product?.images?.map((img) => ({
                     type: "old",
                     url: img.url,
                     publicId: img.publicId
@@ -188,7 +192,8 @@ const UpdateProductPage = () => {
                 description: "",
                 discountPrice: 0,
                 originalPrice: 0,
-                stock: 0
+                stock: 0,
+                size: ""
             })
             setImages([]);
             setPreviewImages([]);
@@ -203,7 +208,8 @@ const UpdateProductPage = () => {
                 description: "",
                 discountPrice: 0,
                 originalPrice: 0,
-                stock: 0
+                stock: 0,
+                size: ""
             })
             setImages([]);
             setPreviewImages([]);
@@ -319,7 +325,7 @@ const UpdateProductPage = () => {
                         />
                     </div>
 
-                    <Input
+                    {/* <Input
                         label="Stock Quantity"
                         type="number"
                         name="stock"
@@ -327,7 +333,40 @@ const UpdateProductPage = () => {
                         required
                         value={inputData?.stock}
                         onChange={handleInputChange}
-                    />
+                    /> */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <Input
+                            label="Stock Quantity"
+                            type="number"
+                            name="stock"
+                            placeholder="0"
+                            required
+                            value={inputData.stock}
+                            onChange={handleInputChange}
+                        />
+
+                        <div
+                            className='flex flex-col'
+                        >
+                            <label className="block mb-2 text-sm text-[#111827]">
+                                Size
+                            </label>
+                            <select
+                                name="size" id=""
+                                className={`w-full px-4 py-2 bg-[#f9fafb] border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all`}
+                                value={inputData.size}
+                                onChange={handleInputChange}
+                            >
+                                {
+                                    sizeOptions.map((size) => (
+                                        <option value={size} key={size}>
+                                            {size}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                    </div>
 
                     <div>
                         <label className="block mb-2 text-sm text-[#111827]">Description</label>

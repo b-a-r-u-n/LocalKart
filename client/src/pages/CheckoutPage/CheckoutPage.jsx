@@ -5,7 +5,7 @@ import { Edit, Phone, Trash2, Truck } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { getSingleUser } from '../../features/userSlice';
-import { clearCart, handlePrice } from '../../features/cartSlice';
+import { clearBuy, clearCart, handlePrice } from '../../features/cartSlice';
 
 const CheckoutPage = () => {
 
@@ -14,7 +14,7 @@ const CheckoutPage = () => {
 
   const { userLocal, loading } = useSelector(state => state.user);
   const { user } = useSelector(state => state.auth);
-  const { cartData, totalSubPrice, shippingPrice, totalPrice } = useSelector(state => state.cart);
+  const { cartData, totalSubPrice, shippingPrice, totalPrice, buyItem } = useSelector(state => state.cart);
 
   useEffect(() => {
     if (!cartData.length) return;
@@ -50,6 +50,7 @@ const CheckoutPage = () => {
     state: "",
     pinCode: ""
   })
+  // console.log(buyItem);
 
   const handleInputChange = (e) => {
     setInputData({ ...inputData, [e.target.name]: e.target.value });
@@ -65,8 +66,6 @@ const CheckoutPage = () => {
       pinCode: address.pinCode || ""
     })
   }
-
-  // const generateWhatsAppMessage = () => {
   //   let message = `🛒 *New Order*\n\n`;
 
   //   cartData?.forEach((item, index) => {
@@ -94,16 +93,42 @@ const CheckoutPage = () => {
 
     message += `📦 *Order Items*\n\n`;
 
-    cartData.forEach((item, index) => {
-      message += `${index + 1}️⃣ *${item.productId.name}*\n`;
-      message += `   └ Qty: ${item.quantity} × ₹${item.productId.discountPrice}\n\n`;
-    });
+    if (buyItem) {
+      console.log("Hyy");
 
-    message += `━━━━━━━━━━━━━━━\n\n`;
-    message += `💰 *Order Summary*\n`;
-    message += `🧾 Subtotal: ₹${totalSubPrice}\n`;
-    message += `🚚 Shipping: ₹${shippingPrice}\n`;
-    message += `🔸 *Total: ₹${totalPrice}*\n\n`;
+      message += `1️⃣ *${buyItem?.name}*\n`;
+      if (buyItem.size) {
+        message += `   └ Size: ${buyItem?.size}\n`;
+      }
+      message += `   └ Qty: ${buyItem?.quantity} × ₹${buyItem?.discountPrice}\n\n`;
+
+      let subTotal = buyItem.discountPrice * buyItem.quantity;
+      let shipping = buyItem.discountPrice < 500 ? 99 : 0;
+      let total = subTotal + shipping
+
+      message += `━━━━━━━━━━━━━━━\n\n`;
+      message += `💰 *Order Summary*\n`;
+      message += `🧾 Subtotal: ₹${subTotal}\n`;
+      message += `🚚 Shipping: ₹${shipping}\n`;
+      message += `🔸 *Total: ₹${total}*\n\n`;
+
+    } else {
+      console.log("Hello");
+
+      cartData.forEach((item, index) => {
+        message += `${index + 1}️⃣ *${item.productId.name}*\n`;
+        if (item.size) {
+          message += `   └ Size: ${item.size}\n`;
+        }
+        message += `   └ Qty: ${item.quantity} × ₹${item.productId.discountPrice}\n\n`;
+      });
+      message += `━━━━━━━━━━━━━━━\n\n`;
+      message += `💰 *Order Summary*\n`;
+      message += `🧾 Subtotal: ₹${totalSubPrice}\n`;
+      message += `🚚 Shipping: ₹${shippingPrice}\n`;
+      message += `🔸 *Total: ₹${totalPrice}*\n\n`;
+    }
+
 
     message += `━━━━━━━━━━━━━━━\n\n`;
     message += `📍 *Delivery Details*\n`;
@@ -151,17 +176,24 @@ const CheckoutPage = () => {
 
     const url = `https://api.whatsapp.com/send?phone=${import.meta.env.VITE_NUMBER}&text=${encodeURIComponent(message)}`;
 
-    try {
+    if (buyItem) {
       toast.success("Order placed successfully! Redirecting to WhatsApp...");
-      window.open(url, "_blank"); // opens WhatsApp
-      await dispatch(clearCart()).unwrap();
-      navigate("/products");
-    } catch (error) {
-      toast.error("Failed to open WhatsApp. Please try again.");
+        window.open(url, "_blank"); // opens WhatsApp
+        dispatch(clearBuy());
+        navigate("/products");
+    } else {
+      try {
+        toast.success("Order placed successfully! Redirecting to WhatsApp...");
+        window.open(url, "_blank"); // opens WhatsApp
+        await dispatch(clearCart()).unwrap();
+        navigate("/products");
+      } catch (error) {
+        toast.error("Failed to open WhatsApp. Please try again.");
+      }
     }
   };
 
-  if(loading || !userLocal){
+  if (loading || !userLocal) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-[#0ea5e9] border-t-transparent rounded-full animate-spin"></div>

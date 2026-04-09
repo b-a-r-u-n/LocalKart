@@ -11,21 +11,21 @@ const ManageProductsPage = () => {
 
   const navigate = useNavigate();
 
-  const {productsLocal} = useSelector(state => state.product);
+  const { productsLocal } = useSelector(state => state.product);
   // console.log(products);
-  
+
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-      await dispatch(getAllProducts()).unwrap()
-    } catch (error) {
-      toast.error(error.message || 'Failed to fetch products. Please try again.');
+        await dispatch(getAllProducts()).unwrap()
+      } catch (error) {
+        toast.error(error.message || 'Failed to fetch products. Please try again.');
+      }
     }
-    }
-    
+
     fetchData();
   }, [])
 
@@ -41,10 +41,22 @@ const ManageProductsPage = () => {
       toast.success(result.message || 'Product removed successfully!');
     } catch (error) {
       toast.error(error?.message || 'Failed to remove product. Please try again.');
-      dispatch(addLocalProduct({product, index}));
+      dispatch(addLocalProduct({ product, index }));
       // console.log(productsLocal);
     }
   }
+
+  const sizeOrder = ["S", "M", "L", "XL", "XXL"];
+  const getSizeStockMap = (sizes = []) => {
+  const map = {};
+
+  sizes.forEach((s) => {
+    const key = (s.size || s).toUpperCase();
+    map[key] = s.stock || 0;
+  });
+
+  return map;
+};
 
   return (
     <div className="p-8">
@@ -83,48 +95,73 @@ const ManageProductsPage = () => {
             <tbody className="bg-white divide-y divide-[#e5e7eb]">
               {
                 productsLocal &&
-              productsLocal?.map((product, index) => (
-                <tr key={product._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={product.images[0].url}
-                        alt={product.name}
-                        className="w-12 h-12 object-cover rounded"
-                        loading='lazy'
-                      />
-                      <div>
-                        <p className="text-sm text-[#111827]">{product.name}</p>
+                productsLocal?.map((product, index) => (
+                  <tr key={product._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={product.images[0].url}
+                          alt={product.name}
+                          className="w-12 h-12 object-cover rounded"
+                          loading='lazy'
+                        />
+                        <div>
+                          <p className="text-sm text-[#111827]">{product.name}</p>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    {product.discountPrice}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-[#111827]">
-                    {product.originalPrice}
-                  </td>
-                  <td className="px-6 py-4">
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700">
+                      {product.discountPrice}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-[#111827]">
+                      {product.originalPrice}
+                    </td>
+                    {/* <td className="px-6 py-4">
                     <Badge variant={product.stock && product.stock > 20 ? 'success' : 'warning'}>
                       {product.stock} in stock
                     </Badge>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleEdit(product)}
-                        className="text-[#0ea5e9] hover:text-[#0284c7] transition-colors cursor-pointer">
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleRemove(product, index)} 
-                        className="text-red-500 hover:text-red-600 transition-colors cursor-pointer">
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                  </td> */}
+                    <td className="px-6 py-4">
+                      {product?.sizes?.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                          {sizeOrder.map((size) => {
+                            const sizeMap = getSizeStockMap(product.sizes);
+                            const stock = sizeMap[size] || 0;
+
+                            return (
+                              <Badge
+                                key={size}
+                                variant={stock > 0 ? "success" : "error"}
+                              >
+                                {size}: {stock}
+                              </Badge>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <Badge
+                          variant={product.stock > 20 ? "success" : "warning"}
+                        >
+                          {product.stock} in stock
+                        </Badge>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleEdit(product)}
+                          className="text-[#0ea5e9] hover:text-[#0284c7] transition-colors cursor-pointer">
+                          <Edit size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleRemove(product, index)}
+                          className="text-red-500 hover:text-red-600 transition-colors cursor-pointer">
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

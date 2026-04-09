@@ -3,14 +3,13 @@ import apiError from "../utils/apiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/uploadOnCloudinary.js";
 import apiResponse from "../utils/apiResponse.js";
-import { log } from "console";
 
 
 const addProduct = asyncHandler(async (req, res) => {
 
     const parsedData = JSON.parse(req.body.inputData);
 
-    const { name, description, originalPrice, discountPrice, stock } = parsedData;
+    const { name, description, originalPrice, discountPrice, size, stock } = parsedData;
 
     // console.log(parsedData);
     
@@ -44,6 +43,7 @@ const addProduct = asyncHandler(async (req, res) => {
         originalPrice,
         discountPrice,
         stock,
+        sizes: size ? [{size, stock}] : [],
         images: cloudinaryURLs
     })
     
@@ -88,7 +88,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 
     const removedImages = JSON.parse(req.body.removedImages || "[]");
 
-    const {name, description, originalPrice, discountPrice, stock} = parsedInputData;
+    const {name, description, originalPrice, discountPrice, stock, size} = parsedInputData;
 
     // console.log("removedImages", removedImages);
     
@@ -162,6 +162,30 @@ const updateProduct = asyncHandler(async (req, res) => {
         .json(
             new apiResponse(200, "Product updated", updatedProduct)
         )
+    }
+
+    if(size){
+        const product = await Product.findById(productId);
+        const isSizeExist = product.sizes.find((s) => s.size === size)
+        if(isSizeExist){
+            await Product.findOneAndUpdate(
+                {_id: productId, "sizes.size": size},
+                {
+                    $set: {
+                        "sizes.$.stock": stock
+                    }
+                }
+            )
+        } else {
+            await Product.findByIdAndUpdate(
+                productId,
+                {
+                    $push: {
+                        sizes: {size, stock}
+                    }
+                }
+            )
+        }
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(

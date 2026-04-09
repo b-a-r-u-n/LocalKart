@@ -17,6 +17,10 @@ const cartItemSchema = new mongoose.Schema(
             default: 1,
             min: 1,
             max: 100
+        },
+        size: {
+            type: String,
+            enum: ["S", "M", "L", "XL", "XXL"]
         }
     }, {timestamps: true}
 )
