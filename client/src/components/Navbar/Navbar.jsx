@@ -39,7 +39,7 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-white border-b border-[#e5e7eb] sticky top-0 z-40 shadow-sm">
+    <nav className="bg-gradient-to-b from-[#101825] to-[#121D30] shadow-md shadow-white/10 sticky top-0 z-40">
       <div className="max-w-10xl mx-auto px-4">
 
         <div className="flex items-center justify-between h-16">
@@ -49,7 +49,7 @@ function Navbar() {
             <div className="bg-[#0ea5e9] text-white px-3 py-2 rounded-lg">
               <ShoppingCart size={24} />
             </div>
-            <span className="text-xl text-[#111827] hidden sm:block">
+            <span className="text-xl text-white ">
               LocalKart
             </span>
           </Link>
@@ -181,7 +181,11 @@ function Navbar() {
               <div className="flex gap-2">
 
                 <Link to="/login">
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-white bg-[#2A3344] hover:text-black"
+                  >
                     Login
                   </Button>
                 </Link>

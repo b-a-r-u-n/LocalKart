@@ -30,7 +30,7 @@ const ProductCard = ({ product }) => {
       return;
     }
 
-    if(product.sizes.length > 0 && !selectedSize) {
+    if (product.sizes.length > 0 && !selectedSize) {
       toast.error("Please select a size");
       return;
     }
@@ -70,7 +70,7 @@ const ProductCard = ({ product }) => {
           <img
             src={product.images[0].url}
             alt={product.name}
-            className="w-full h-64 object-contain object-center"
+            className="w-full h-32 md:h-64 object-contain object-center"
             loading='lazy'
           />
         </div>
@@ -81,79 +81,46 @@ const ProductCard = ({ product }) => {
       <div className="p-4">
 
         <Link to={`/product/${product._id}`}>
-          <h3 className="mb-2 line-clamp-2 hover:text-[#0ea5e9]">
+          <h3 className="mb-2 text-md sm:leading-5 md:text-lg lg:text-xl line-clamp-2 hover:text-[#0ea5e9]">
             {product.name}
           </h3>
         </Link>
 
-        {/* {product.sizes.length > 0 && (
-          <div className="flex gap-2 mb-3 flex-wrap">
-            {product.sizes.map((sizeObj, index) => {
-              const size = sizeObj.size || sizeObj;
-              const isOutOfStock = sizeObj.stock === 0;
-
-              return (
-                <button
-                  key={index}
-                  disabled={isOutOfStock}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setSelectedSize(size);
-                  }}
-                  className={`px-3 py-1 border rounded-md text-sm transition cursor-pointer ${
-                    selectedSize === size
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-gray-700 hover:border-black"
-                  } ${
-                    isOutOfStock
-                      ? "opacity-40 cursor-not-allowed line-through"
-                      : ""
-                  }`}
-                >
-                  {size}
-                </button>
-              );
-            })}
-          </div>
-        )} */}
-
         {product.sizes.length > 0 && (
-  <div className="flex gap-2 mb-3 flex-wrap">
-    {[...product.sizes]
-      .sort((a, b) => {
-        const sizeA = (a.size || a).toUpperCase();
-        const sizeB = (b.size || b).toUpperCase();
+          <div className="flex gap-1 md:gap-2 mb-3 flex-wrap">
+            {[...product.sizes]
+              .sort((a, b) => {
+                const sizeA = (a.size || a).toUpperCase();
+                const sizeB = (b.size || b).toUpperCase();
 
-        return sizeOrder.indexOf(sizeA) - sizeOrder.indexOf(sizeB);
-      })
-      .map((sizeObj, index) => {
-        const size = sizeObj.size || sizeObj;
-        const isOutOfStock = sizeObj.stock === 0;
+                return sizeOrder.indexOf(sizeA) - sizeOrder.indexOf(sizeB);
+              })
+              .map((sizeObj, index) => {
+                const size = sizeObj.size || sizeObj;
+                const isOutOfStock = sizeObj.stock === 0;
 
-        return (
-          <button
-            key={index}
-            disabled={isOutOfStock}
-            onClick={(e) => {
-              e.preventDefault();
-              setSelectedSize(size);
-            }}
-            className={`px-3 py-1 border rounded-md text-sm transition cursor-pointer ${
-              selectedSize === size
-                ? "bg-black text-white border-black"
-                : "bg-white text-gray-700 hover:border-black"
-            } ${
-              isOutOfStock
-                ? "opacity-40 cursor-not-allowed line-through"
-                : ""
-            }`}
-          >
-            {size}
-          </button>
-        );
-      })}
-  </div>
-)}
+                return (
+                  <button
+                    key={index}
+                    disabled={isOutOfStock}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedSize(size);
+                    }}
+                    className={`px-2 py-0.5 md:px-3 md:py-1 border rounded-md text-xs font-semibold md:text-md lg:text-lg transition cursor-pointer ${selectedSize === size
+                        ? "bg-black text-white border-black"
+                        : "bg-white text-gray-700 hover:border-black"
+                      } ${isOutOfStock
+                        ? "opacity-40 cursor-not-allowed line-through"
+                        : ""
+                      }`}
+                  >
+                    {size}
+                  </button>
+                );
+              })}
+          </div>
+        )}
 
 
         {/* <div className="flex items-center gap-1 mb-2">

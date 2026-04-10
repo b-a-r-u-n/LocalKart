@@ -33,10 +33,15 @@ const ProductsPage = () => {
       </div>
     );
   }
-
+  // from-[#101624] via-[#1F3461] to-[#6643a0]
+  // bg-gradient-to-r from-black/90 via-black/60 to-transparent
+  // bg-gradient-to-r from-[#101624] via-[#1F3461] to-[#6643a0]
+  
   return (
     <div className="min-h-screen max-w-full bg-gray-50">
-      <div className="w-full bg-white py-6">
+      <div 
+        className="w-full bg-transparent py-6 bg-gradient-to-r from-[#101624] to-[#1F3461]"
+      >
 
         {/* <h1 className="text-3xl mb-6 px-6 lg:px-16 text-[#111827]">
           Trending Products
@@ -52,11 +57,14 @@ const ProductsPage = () => {
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
+          className='bg-gradient-to-r from-[#101624] via-[#1F3461] to-[#6643a0] rounded-2xl shadow-md/20 shadow-white inset-shadow-sm inset-shadow-white/20'
         >
           {products.slice(-5).reverse().map((product) => (
             <SwiperSlide key={product._id}>
-              <div className="flex justify-center w-full">
-                <div className="relative w-full max-w-7xl h-[220px] md:h-[420px] lg:h-[480px] rounded-2xl overflow-hidden">
+              <div 
+                className="flex justify-center w-full "
+              >
+                <div className="relative w-full max-w-7xl h-[220px] md:h-[420px] lg:h-[480px] rounded-2xl overflow-hidden ">
 
                   {/* Image */}
                   <img
@@ -65,15 +73,15 @@ const ProductsPage = () => {
                   />
 
                   {/* 🔥 Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent"></div>
+                  <div className="absolute inset-0 "></div>
 
                   {/* 🔥 NEW LAUNCH Badge */}
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="bg-yellow-400 text-black text-xs md:text-sm font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
+                  <div className="absolute top-4 lg:top-7 left-4 lg:left-10 flex items-center gap-2">
+                    <span className="bg-yellow-400 text-black text-xs md:text-sm lg:text-xl font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
                       🚀 NEW LAUNCH
                     </span>
 
-                    <span className="bg-red-500 text-white text-xs md:text-sm px-3 py-1 rounded-full">
+                    <span className="bg-red-500 text-white text-xs md:text-sm lg:text-xl px-3 py-1 rounded-full">
                       {Math.round(
                         ((product.originalPrice - product.discountPrice) / product.originalPrice) * 100
                       )}% OFF
@@ -84,7 +92,7 @@ const ProductsPage = () => {
                   <div className="absolute top-[60%] left-8 md:left-16 transform -translate-y-1/2 text-white max-w-lg">
 
                     {/* Subtitle */}
-                    <p className="text-yellow-400 font-semibold mb-2 tracking-wide uppercase text-xs md:text-sm">
+                    <p className="text-yellow-400 font-semibold mb-2 tracking-wide uppercase text-xs md:text-sm lg:text-xl">
                       Just Launched
                     </p>
 
@@ -105,12 +113,11 @@ const ProductsPage = () => {
 
                     {/* CTA */}
                     <Link to={`/product/${product._id}`}>
-                      <Button
-                        variant="primary"
-                        className="px-6 py-3 font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-all"
+                      <button
+                        className="bg-[#0ea5e9] rounded-lg px-2 py-1.5 md:px-6 md:py-3 font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition-all"
                       >
                         Explore Now →
-                      </Button>
+                      </button>
                     </Link>
 
                   </div>
@@ -121,15 +128,17 @@ const ProductsPage = () => {
 
                 </div>
               </div>
-            </SwiperSlide>
+          </SwiperSlide>
           ))}
         </Swiper>
           <FeatureStrip />
       </div>
+
+      
       {
         products.length > 0 ?
           (
-            <div className="max-w-7xl mx-auto px-4 pb-6">
+            <div className="mt-4 max-w-7xl mx-auto px-4 pb-6">
               <h1 className="text-3xl mb-4 text-[#111827]">All Products</h1>
               <NavLink
                 to="/products"
@@ -141,7 +150,7 @@ const ProductsPage = () => {
               <div className="flex gap-6 mt-5">
                 <div className="flex-1">
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
                     {
                       products &&
                       products.map((product) => (
