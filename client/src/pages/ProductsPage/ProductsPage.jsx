@@ -39,7 +39,14 @@ const ProductsPage = () => {
   
   return (
     <div className="min-h-screen max-w-full bg-gray-50">
-      <div 
+      
+
+      
+      {
+        products.length > 0 ?
+          (
+            <>
+              <div 
         className="w-full bg-transparent py-6 bg-gradient-to-r from-[#101624] to-[#1F3461]"
       >
 
@@ -133,11 +140,6 @@ const ProductsPage = () => {
         </Swiper>
           <FeatureStrip />
       </div>
-
-      
-      {
-        products.length > 0 ?
-          (
             <div className="mt-4 max-w-7xl mx-auto px-4 pb-6">
               <h1 className="text-3xl mb-4 text-[#111827]">All Products</h1>
               <NavLink
@@ -163,6 +165,7 @@ const ProductsPage = () => {
                 </div>
               </div>
             </div>
+            </>
           )
           :
           (
