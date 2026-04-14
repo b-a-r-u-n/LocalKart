@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Badge, Card, ProductCarousel } from '../../components';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Badge, BargainModal, Card, ProductCarousel } from '../../components';
 import { Heart, Minus, Plus, RotateCcw, Shield, ShoppingCart, Star, Truck } from 'lucide-react';
 import { Button } from '../../components/Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '../../features/productSlice';
 import toast from 'react-hot-toast';
-import { addToCart, getCartData, handleBuy } from '../../features/cartSlice';
+import { addToCart, handleBuy } from '../../features/cartSlice';
 
 const ProductDetailsPage = () => {
+
+  const location = useLocation();
 
   const { product, loading } = useSelector(state => state.product);
   const { isLoggedIn } = useSelector(state => state.auth);
@@ -22,6 +24,8 @@ const ProductDetailsPage = () => {
   const [quantity, setQuantity] = useState(1);
 
   const [selectedSize, setSelectedSize] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const sizeOrder = ["S", "M", "L", "XL", "XXL"];
 
@@ -37,6 +41,22 @@ const ProductDetailsPage = () => {
     if (id)
       fetchData();
   }, [id])
+
+  // useEffect(() => {
+  //     if (window.innerWidth < 1024)
+  //       setIsMobile(true);
+  //   }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const [rating] = useState((Math.random() * 1.5 + 3.5).toFixed(1));
 
@@ -67,13 +87,15 @@ const ProductDetailsPage = () => {
       return;
     }
 
-    if(product?.sizes?.length > 0 && !selectedSize) {
+    if (product?.sizes?.length > 0 && !selectedSize) {
       toast.error("Please select a size");
       return;
     }
 
+    
+
     try {
-      const result = await dispatch(addToCart({ productId: product._id, quantity, size: selectedSize })).unwrap();
+      const result = await dispatch(addToCart({ productId: product?._id, quantity, size: selectedSize })).unwrap();
       // console.log(result);      
       toast.success(result.message || "Product added to cart");
     } catch (error) {
@@ -82,7 +104,26 @@ const ProductDetailsPage = () => {
       toast.error(error.message || "Failed to add product to cart");
     }
   }
-  
+
+  const handleBargaining = (e) => {
+    e.preventDefault();
+
+    if (!isLoggedIn) {
+      toast.error("Please log in to add items to cart");
+      navigate("/login", {
+        state: { from: location.pathname }
+      });
+      return;
+    }
+
+    if (product?.sizes?.length > 0 && !selectedSize) {
+      toast.error("Please select a size before bargaining");
+      return;
+    }
+
+    setModalOpen(true);
+  }
+
   const handleBuyNow = () => {
     if (!isLoggedIn) {
       toast.error("Please log in to add items to cart");
@@ -91,28 +132,28 @@ const ProductDetailsPage = () => {
       });
       return;
     }
-    
-    if(product?.sizes?.length > 0 && !selectedSize) {
+
+    if (product?.sizes?.length > 0 && !selectedSize) {
       toast.error("Please select a size");
       return;
     }
-    
-    dispatch(handleBuy({product, quantity, size: selectedSize}));
+
+    dispatch(handleBuy({ product, quantity, size: selectedSize }));
     navigate("/checkout");
   }
 
   const getDisplayStock = () => {
     if (!product?.sizes || product?.sizes?.length === 0) {
-      return product.stock; // no sizes → normal stock
+      return product?.stock; // no sizes → normal stock
     }
 
     if (!selectedSize) {
       // no size selected → show total stock
-      return product.stock;
+      return product?.stock;
     }
 
     // find selected size stock
-    const selected = product.sizes.find(
+    const selected = product?.sizes?.find(
       (s) => (s.size || s) === selectedSize
     );
 
@@ -159,18 +200,18 @@ const ProductDetailsPage = () => {
             </div>
 
             <div className="flex items-center gap-4 mb-6">
-              <span className="text-4xl text-[#111827]">₹{product.discountPrice}</span>
-              {product.originalPrice && (
+              <span className="text-4xl text-[#111827]">₹{product?.discountPrice}</span>
+              {product?.originalPrice && (
                 <>
-                  <span className="text-xl text-gray-500 line-through">₹{product.originalPrice}</span>
+                  <span className="text-xl text-gray-500 line-through">₹{product?.originalPrice}</span>
                   <Badge variant="warning">
-                    {Math.round(((product.originalPrice - product.discountPrice) / product.originalPrice) * 100)}% OFF
+                    {Math.round(((product?.originalPrice - product?.discountPrice) / product?.originalPrice) * 100)}% OFF
                   </Badge>
                 </>
               )}
             </div>
 
-            <p className="text-gray-700 mb-6">{product.description}</p>
+            <p className="text-gray-700 mb-6">{product?.description}</p>
 
             {product?.sizes?.length > 0 && (
               <div className="flex gap-2 mb-3 flex-wrap">
@@ -247,15 +288,36 @@ const ProductDetailsPage = () => {
               </Button>
             </div>
 
-            {/* <Link to="/checkout"> */}
-              <Button 
-                variant="accent" 
-                className="w-full mb-6 cursor-pointer"
-                onClick={handleBuyNow}
-              >
-                Buy Now
-              </Button>
-            {/* </Link> */}
+
+            <Button
+              variant="accent"
+              className="w-full cursor-pointer"
+              onClick={handleBuyNow}
+            >
+              Buy Now
+            </Button>
+
+            <button
+              size="sm"
+              className="mt-2 mb-6 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black text-lg font-bold py-2.5 rounded-lg shadow-md cursor-pointer "
+              onClick={handleBargaining}
+            >
+
+              <span>📢</span> Bargain
+            </button>
+
+            {
+              product && (
+                <BargainModal
+              product={product}
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              isMobile={isMobile}
+              selectedSize={selectedSize}
+            />
+              )
+            }
+
 
             <div className="grid grid-cols-3 gap-4">
               <Card className="p-4 text-center">

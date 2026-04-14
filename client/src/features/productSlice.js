@@ -54,7 +54,7 @@ export const updateProduct = createAsyncThunk("updateProduct", async ({ formData
 const initialState = {
     products: [],
     productsLocal: [],
-    product: [],
+    product: null,
     loading: false,
     error: null,
     success: false

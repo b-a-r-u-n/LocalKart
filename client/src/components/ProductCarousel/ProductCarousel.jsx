@@ -48,7 +48,7 @@ const ProductCarousel = ({ images = [] }) => {
       </div>
 
       {/* Thumbnails */}
-      <div className="flex flex-wrap gap-3 mt-4 ">
+      <div className="flex flex-wrap gap-3 mt-4 justify-center ">
         {images.map((img, index) => (
           <img
             key={index}

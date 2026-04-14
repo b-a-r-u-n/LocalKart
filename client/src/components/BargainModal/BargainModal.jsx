@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 
 const BargainModal = ({ product, modalOpen, setModalOpen, isMobile, selectedSize }) => {
 
+
   const { user } = useSelector(state => state.auth)
 
   const [offerPrice, setOfferPrice] = useState("");

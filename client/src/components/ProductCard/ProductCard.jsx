@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
       return;
     }
 
-    if (product.sizes.length > 0 && !selectedSize) {
+    if (product?.sizes?.length > 0 && !selectedSize) {
       toast.error("Please select a size");
       return;
     }
