@@ -17,7 +17,7 @@ const features = [
 
 const FeatureStrip = () => {
     return (
-        <div className="mt-4 px-1">
+        <div className="mt-4 px-1 w-full max-w-7xl mx-auto">
             <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 rounded-xl p-3 shadow-lg">
                 <div className="flex justify-between items-center text-white">
                     {features.map((item, index) => (

@@ -39,8 +39,8 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-gradient-to-b from-[#101825] to-[#121D30] shadow-md shadow-white/10 sticky top-0 z-40">
-      <div className="max-w-10xl mx-auto px-4">
+    <nav className="bg-gradient-to-b from-[#101825] to-[#121D30] shadow-md shadow-white/10 sticky top-0 z-40 ">
+      <div className="max-w-10xl mx-auto px-4 w-full max-w-7xl">
 
         <div className="flex items-center justify-between h-16">
 
@@ -89,7 +89,7 @@ function Navbar() {
 
                     <Link to="/cart" className="relative">
 
-                      <ShoppingCart size={24} />
+                      <ShoppingCart size={24} color="white" />
 
                       {cartData?.length > 0 && (
                         <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
@@ -109,11 +109,11 @@ function Navbar() {
                     onClick={() =>
                       setShowUserMenu(!showUserMenu)
                     }
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 cursor-pointer"
                   >
-                    <User size={24} />
+                    <User size={24} color="white" />
                     <span
-                      className="hidden sm:block"
+                      className="hidden sm:block text-white font-medium"
                     >
                       {user?.fullName}
                     </span>

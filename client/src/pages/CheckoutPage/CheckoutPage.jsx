@@ -94,7 +94,6 @@ const CheckoutPage = () => {
     message += `📦 *Order Items*\n\n`;
 
     if (buyItem) {
-      console.log("Hyy");
 
       message += `1️⃣ *${buyItem?.name}*\n`;
       if (buyItem.size) {
@@ -113,7 +112,6 @@ const CheckoutPage = () => {
       message += `🔸 *Total: ₹${total}*\n\n`;
 
     } else {
-      console.log("Hello");
 
       cartData.forEach((item, index) => {
         message += `${index + 1}️⃣ *${item.productId.name}*\n`;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '../Card/Card';
 import { Link, useNavigate } from 'react-router-dom';
 import { Heart, ShoppingCart, Star } from 'lucide-react';
@@ -6,6 +6,7 @@ import { Button } from '../Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { addToCart } from '../../features/cartSlice';
+import BargainModal from '../BargainModal/BargainModal';
 
 const ProductCard = ({ product }) => {
 
@@ -17,8 +18,15 @@ const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
 
   const [selectedSize, setSelectedSize] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const sizeOrder = ["S", "M", "L", "XL", "XXL"];
+
+  useEffect(() => {
+    if (window.innerWidth < 1024)
+      setIsMobile(true);
+  }, [])
 
 
   const handleAddToCart = async () => {
@@ -44,6 +52,25 @@ const ProductCard = ({ product }) => {
       toast.error(error.message || "Failed to add product to cart");
     }
   };
+
+  const handleBargaining = (e) => {
+    e.preventDefault();
+
+    if (!isLoggedIn) {
+      toast.error("Please log in to add items to cart");
+      navigate("/login", {
+        state: { from: location.pathname }
+      });
+      return;
+    }
+
+    if (product.sizes.length > 0 && !selectedSize) {
+      toast.error("Please select a size before bargaining");
+      return;
+    }
+
+    setModalOpen(true);
+  }
 
   if (loading) {
     return (
@@ -108,8 +135,8 @@ const ProductCard = ({ product }) => {
                       setSelectedSize(size);
                     }}
                     className={`px-2 py-0.5 md:px-3 md:py-1 border rounded-md text-xs font-semibold md:text-md lg:text-lg transition cursor-pointer ${selectedSize === size
-                        ? "bg-black text-white border-black"
-                        : "bg-white text-gray-700 hover:border-black"
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-gray-700 hover:border-black"
                       } ${isOutOfStock
                         ? "opacity-40 cursor-not-allowed line-through"
                         : ""
@@ -164,6 +191,23 @@ const ProductCard = ({ product }) => {
           <ShoppingCart size={16} className="mr-2" />
           Add to Cart
         </Button>
+
+        <button
+          size="sm"
+          className="mt-2 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black text-lg font-bold py-2.5 rounded-lg shadow-md cursor-pointer "
+          onClick={handleBargaining}
+        >
+
+          <span>📢</span> Bargain
+        </button>
+
+        <BargainModal 
+          product={product}
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          isMobile={isMobile}
+          selectedSize={selectedSize}
+        />
 
       </div>
 
